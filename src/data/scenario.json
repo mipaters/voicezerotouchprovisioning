@@ -1,0 +1,217 @@
+{
+  "meta": {
+    "title": "Spectrum Business Voice — Zero-Call Onboarding",
+    "customer": "Maria Alvarez · Peachtree Family Dental",
+    "legacyDays": 14,
+    "totalSeconds": 286,
+    "timeScale": 1.3
+  },
+  "lanes": [
+    { "id": "customer", "label": "Customer" },
+    { "id": "scheduling", "label": "Scheduling" },
+    { "id": "billing", "label": "Billing", "sub": "Salesforce / iComms" },
+    { "id": "ops", "label": "Order of Ops" },
+    { "id": "entops", "label": "Enterprise Ops" },
+    { "id": "activation", "label": "Activation" }
+  ],
+  "agents": {
+    "sales": { "name": "Sales Agent", "initials": "SA", "color": "#25D366" },
+    "profiler": { "name": "Background Profiler Agent", "initials": "BP", "color": "#0099D8" },
+    "order": { "name": "Order Agent", "initials": "OA", "color": "#6C5CE7" },
+    "port": { "name": "Number Port Agent", "initials": "NP", "color": "#E17055" },
+    "compliance": { "name": "Compliance Agent", "initials": "CA", "color": "#D63031" },
+    "orchestrator": { "name": "Orchestrator Agent", "initials": "OR", "color": "#FDCB6E" },
+    "provisioning": { "name": "Provisioning Agent", "initials": "PA", "color": "#00B894" },
+    "netconfig": { "name": "Network Config Agent", "initials": "NC", "color": "#74B9FF" },
+    "scheduling": { "name": "Scheduling Agent", "initials": "SC", "color": "#FD79A8" },
+    "activation": { "name": "Activation Agent", "initials": "AC", "color": "#55EFC4" },
+    "quality": { "name": "Quality Agent", "initials": "QA", "color": "#A29BFE" }
+  },
+  "steps": [
+    { "id": "intake", "lane": "customer", "col": 0, "title": "Intake", "agent": "sales", "systems": ["WhatsApp Business API"], "today": "Customer has to call the call centre" },
+    { "id": "profile", "lane": "billing", "col": 1, "title": "Account lookup & profile", "agent": "profiler", "systems": ["Salesforce", "iComms"], "today": "Re-asking for data already on the account" },
+    { "id": "port", "lane": "ops", "col": 2, "title": "Port verification, CNAM, E911", "agent": "port", "coAgent": "compliance", "systems": ["LNP/NPAC", "CNAM DB", "E911 DB"], "today": "Re-keying the same data into many systems" },
+    { "id": "truck", "lane": "activation", "col": 3, "title": "Truck roll decision", "agent": "scheduling", "systems": ["Field Service"], "today": "A truck is always rolled" },
+    { "id": "sched", "lane": "scheduling", "col": 4, "title": "Scheduling verification", "agent": "scheduling", "systems": ["Field Service"], "today": "Phone tag to verify the date; loops back" },
+    { "id": "quality", "lane": "activation", "col": 5, "title": "Essentials completeness check", "agent": "quality", "systems": ["All systems"], "today": "Missed essential = upset customer + care call" },
+    { "id": "order", "lane": "billing", "col": 6, "title": "Account, quote & order creation", "agent": "order", "systems": ["Salesforce", "iComms"], "today": "Manual data entry; no SMB vs Enterprise priority" },
+    { "id": "prio", "lane": "ops", "col": 7, "title": "Order prioritization & routing", "agent": "orchestrator", "systems": ["Workflow engine"], "today": "Orders sit in a queue with no priority" },
+    { "id": "prov", "lane": "entops", "col": 8, "title": "Provision in BroadWorks", "agent": "provisioning", "systems": ["Cisco BroadWorks"], "today": "Manual provisioning" },
+    { "id": "gw", "lane": "entops", "col": 9, "title": "Configure gateway & CPE", "agent": "netconfig", "systems": ["Device mgmt / ACS"], "today": "Manual GW & CPE configuration" },
+    { "id": "act", "lane": "activation", "col": 10, "title": "Port activation + test call", "agent": "activation", "systems": ["BroadWorks", "LNP/NPAC"], "today": "Customer must be on the phone to accept" }
+  ],
+  "essentials": [
+    { "id": "who", "label": "Who & where" },
+    { "id": "lines", "label": "Need & lines" },
+    { "id": "numbers", "label": "Numbers" },
+    { "id": "package", "label": "Package" },
+    { "id": "date", "label": "Install date" },
+    { "id": "payment", "label": "Payment" }
+  ],
+  "phases": [
+    { "id": "p1", "title": "1 · Welcome & background profile", "notes": [
+      "Maria starts on WhatsApp, a channel she already uses. No hold music, no IVR.",
+      "The Profiler Agent pulls account, PII and serviceability while the greeting is typed.",
+      "The agent confirms what it found instead of re-asking, which is the first moment of delight.",
+      "Today: the customer must call, and an agent re-keys what we already know."
+    ] },
+    { "id": "p2", "title": "2 · Need & sizing", "notes": [
+      "Intent is captured in her own words, then sized from the business profile (typical dental practice: 3–4 lines).",
+      "Pricing is shown up front. All pricing is illustrative demo pricing.",
+      "A top-performing rep recommends rather than interrogates."
+    ] },
+    { "id": "p3", "title": "3 · Numbers & porting", "notes": [
+      "About 90% of orders are ports, so we ask early.",
+      "One bill photo and one e-signature replace faxes and callbacks.",
+      "Port, CNAM and E911 checks run in parallel instead of being re-keyed into several systems."
+    ] },
+    { "id": "p4", "title": "4 · Package & upsell", "notes": [
+      "WhatsApp list message: three packages that differ by voicemail, auto-attendant, hunt group and Teams.",
+      "Natural upsell moment: Teams bundle (and mobile lines, offered and declined).",
+      "Hunt group makes sure front-desk lines ring together."
+    ] },
+    { "id": "p5", "title": "5 · Scheduling decision", "notes": [
+      "Today a truck is always rolled. The agent checks the CPE on file and decides self-install vs technician.",
+      "Three real slots are offered as quick replies, with no phone tag to verify the date."
+    ] },
+    { "id": "p6", "title": "6 · Secure payment", "notes": [
+      "Card data never enters the chat. A PCI-compliant hosted link captures it.",
+      "Only a token lands in the billing system."
+    ] },
+    { "id": "p7", "title": "7 · Quality guardrail & confirmation", "notes": [
+      "The Quality Agent validates all essentials before submission.",
+      "It catches the one missing detail (hunt group ring order) and Maria answers a single quick question.",
+      "Avoided: a bad first experience plus a call into customer care.",
+      "Read-back and one tap to confirm gives an order number."
+    ] },
+    { "id": "p8", "title": "8 · Provisioning, no human touch", "notes": [
+      "Order, prioritization, BroadWorks provisioning and gateway config run as one continuous flow.",
+      "Zero systems touched by humans, zero handoffs. Exceptions would route to human-in-the-loop approval."
+    ] },
+    { "id": "p9", "title": "9 · Activation day", "notes": [
+      "On the chosen date, the customer gets one WhatsApp message and taps Accept.",
+      "Port activation and a test call complete with no phone call to the customer.",
+      "Same-day order, activation on the customer's chosen date."
+    ] },
+    { "id": "p10", "title": "Summary", "notes": [
+      "Zero calls, zero human system touches, six of six essentials captured.",
+      "Under the hood: Foundry agents plus MCP/API connectors, monitored in Azure with human approval for exceptions."
+    ] }
+  ],
+  "events": [
+    { "t": 0, "phase": "p1", "type": "log", "agent": "sales", "system": "WhatsApp Business API", "text": "Inbound conversation opened from +1 404 555 0142 (profile name: Maria Alvarez)", "latencyMs": 120, "delayMs": 700 },
+    { "t": 1, "phase": "p1", "type": "agent", "stepId": "intake", "status": "running", "delayMs": 300 },
+    { "t": 4, "phase": "p1", "type": "chat", "speaker": "agent", "text": "Hi Maria, welcome to Spectrum Business 👋 I'm your virtual sales assistant. I can get your phone service set up in a few minutes, right here in WhatsApp.\n\nTo start: what's the business name or the address you're setting up?", "delayMs": 1800 },
+    { "t": 16, "phase": "p1", "type": "chat", "speaker": "customer", "text": "Hi! Peachtree Family Dental, 1450 Peachtree St NE in Atlanta", "delayMs": 2600 },
+    { "t": 17, "phase": "p1", "type": "agent", "stepId": "intake", "status": "done", "delayMs": 500 },
+    { "t": 18, "phase": "p1", "type": "agent", "stepId": "profile", "status": "running", "delayMs": 400 },
+    { "t": 19, "phase": "p1", "type": "log", "agent": "profiler", "system": "Salesforce", "text": "Account match: Peachtree Family Dental (SMB, healthcare), Spectrum Business Internet 500 Mbps", "latencyMs": 412, "delayMs": 900 },
+    { "t": 20, "phase": "p1", "type": "log", "agent": "profiler", "system": "iComms", "text": "PII retrieved: owner Maria Alvarez, service address 1450 Peachtree St NE, Atlanta GA 30309 (masked in logs)", "latencyMs": 387, "delayMs": 900 },
+    { "t": 21, "phase": "p1", "type": "log", "agent": "profiler", "system": "Serviceability DB", "text": "Voice serviceability: ✔ serviceable · on-site CPE: DOCSIS gateway with voice (eMTA) support", "latencyMs": 530, "delayMs": 900 },
+    { "t": 22, "phase": "p1", "type": "agent", "stepId": "profile", "status": "done", "delayMs": 600 },
+    { "t": 23, "phase": "p1", "type": "checklist", "itemId": "who", "delayMs": 300 },
+    { "t": 25, "phase": "p1", "type": "chat", "speaker": "agent", "text": "Found you! I see Peachtree Family Dental at 1450 Peachtree St NE, with Spectrum Business Internet (500 Mbps). Is that the right location?", "widget": { "kind": "location", "label": "Peachtree Family Dental", "address": "1450 Peachtree St NE, Atlanta, GA" }, "replies": ["Yes, that's us"], "delayMs": 1600 },
+    { "t": 33, "phase": "p1", "type": "chat", "speaker": "customer", "text": "Yes, that's us", "selects": "Yes, that's us", "delayMs": 2000 },
+
+    { "t": 36, "phase": "p2", "type": "chat", "speaker": "agent", "text": "Perfect. What brings you in today?", "delayMs": 1200 },
+    { "t": 46, "phase": "p2", "type": "chat", "speaker": "customer", "text": "We want phone lines for the office. We're on your Internet already, but our phones are with another company and they're a headache.", "delayMs": 2800 },
+    { "t": 47, "phase": "p2", "type": "log", "agent": "sales", "system": "Intent classifier", "text": "Intent: ADD_VOICE_LINES (confidence 0.97). Relationship: existing Internet customer", "latencyMs": 210, "delayMs": 500 },
+    { "t": 50, "phase": "p2", "type": "chat", "speaker": "agent", "text": "Happy to fix that. Practices like yours usually run 3–4 lines (front desk, billing, a treatment-room line and a fax/alarm line).\n\nSpectrum Business Voice starts at $24.99/line/month. 4 lines would be from $99.96/mo.\nIllustrative demo pricing\n\nHow many lines would you like?", "replies": ["2 lines", "3 lines", "4 lines"], "delayMs": 2000 },
+    { "t": 60, "phase": "p2", "type": "chat", "speaker": "customer", "text": "4 lines", "selects": "4 lines", "delayMs": 2000 },
+    { "t": 61, "phase": "p2", "type": "checklist", "itemId": "lines", "delayMs": 300 },
+    { "t": 61, "phase": "p2", "type": "log", "agent": "sales", "system": "Quote engine", "text": "Draft quote started: 4 × Business Voice line (illustrative demo pricing)", "latencyMs": 180, "delayMs": 500 },
+
+    { "t": 65, "phase": "p3", "type": "chat", "speaker": "agent", "text": "Great choice. Are you keeping your existing phone numbers? Most customers do, and we handle the switch for you.", "replies": ["Keep existing", "New numbers", "A mix of both"], "delayMs": 1500 },
+    { "t": 75, "phase": "p3", "type": "chat", "speaker": "customer", "text": "A mix: keep 3 of our current numbers and add 1 new one for the new treatment room", "selects": "A mix of both", "delayMs": 2800 },
+    { "t": 90, "phase": "p3", "type": "chat", "speaker": "agent", "text": "Got it: 3 ports plus 1 new number. Could you snap a photo of your latest phone bill? That lets me verify the numbers with your current carrier.", "delayMs": 1700 },
+    { "t": 104, "phase": "p3", "type": "chat", "speaker": "customer", "text": "", "widget": { "kind": "photo", "name": "Northstar_Telecom_bill_Oct.jpg", "size": "1.2 MB" }, "delayMs": 3000 },
+    { "t": 105, "phase": "p3", "type": "agent", "stepId": "port", "status": "running", "delayMs": 500 },
+    { "t": 106, "phase": "p3", "type": "log", "agent": "port", "system": "Document AI", "text": "Bill OCR: carrier Northstar Telecom · BTN (404) 555-0101 · 3 numbers extracted · name matches account holder", "latencyMs": 940, "delayMs": 900 },
+    { "t": 108, "phase": "p3", "type": "log", "agent": "port", "system": "LNP/NPAC", "text": "LNP eligibility check: 3/3 numbers portable ✔", "latencyMs": 640, "delayMs": 900 },
+    { "t": 109, "phase": "p3", "type": "log", "agent": "compliance", "system": "E911 DB", "text": "E911 address validated (MSAG match) for 1450 Peachtree St NE ✔", "latencyMs": 355, "delayMs": 800 },
+    { "t": 110, "phase": "p3", "type": "log", "agent": "port", "system": "CNAM DB", "text": "CNAM caller-ID name reserved: PEACHTREE FAMILY DENT ✔ · new number (404) 555-0188 assigned", "latencyMs": 290, "delayMs": 800 },
+    { "t": 111, "phase": "p3", "type": "agent", "stepId": "port", "status": "done", "delayMs": 600 },
+    { "t": 115, "phase": "p3", "type": "chat", "speaker": "agent", "text": "Thanks Maria! All 3 numbers are portable ✅ and I've reserved a new number for the treatment room: (404) 555-0188.\n\nTo authorize the switch I just need your e-signature on a Letter of Authorization.", "widget": { "kind": "loa", "id": "loa1", "numbers": ["(404) 555-0101", "(404) 555-0102", "(404) 555-0103"], "carrier": "Northstar Telecom" }, "delayMs": 2000 },
+    { "t": 130, "phase": "p3", "type": "chat", "speaker": "system", "text": "Maria signed the LOA ✔", "resolves": "loa1", "delayMs": 3000 },
+    { "t": 131, "phase": "p3", "type": "log", "agent": "port", "system": "LNP/NPAC", "text": "LOA captured, port-in requests staged for due date (no submission until order confirmed)", "latencyMs": 260, "delayMs": 600 },
+    { "t": 132, "phase": "p3", "type": "checklist", "itemId": "numbers", "delayMs": 300 },
+
+    { "t": 136, "phase": "p4", "type": "chat", "speaker": "agent", "text": "Now let's choose features. Here are three packages (per line, per month):", "widget": { "kind": "list", "id": "pkg", "button": "View packages", "items": [
+      { "id": "essentials", "title": "Essentials", "price": "$24.99", "desc": "Voicemail" },
+      { "id": "plus", "title": "Plus", "price": "$34.99", "desc": "Voicemail + auto-attendant (IVR)" },
+      { "id": "complete", "title": "Complete", "price": "$44.99", "desc": "Plus + hunt group + Microsoft Teams calling" }
+    ], "footnote": "Illustrative demo pricing" }, "delayMs": 2000 },
+    { "t": 148, "phase": "p4", "type": "chat", "speaker": "customer", "text": "Plus", "selects": "plus", "delayMs": 3000 },
+    { "t": 152, "phase": "p4", "type": "chat", "speaker": "agent", "text": "Plus is a great fit: voicemail and an auto-attendant to greet patients.\n\nTwo popular add-ons for dental offices:\n• Microsoft Teams calling bundle, so staff can take calls on laptops and mobiles (+$4.99/line)\n• Mobile lines for your hygienists\n\nWant either?", "replies": ["Add Teams bundle", "Add mobile lines", "No thanks"], "delayMs": 2200 },
+    { "t": 164, "phase": "p4", "type": "chat", "speaker": "customer", "text": "Teams bundle sounds good. And can the front desk lines ring together when someone calls?", "selects": "Add Teams bundle", "delayMs": 3000 },
+    { "t": 167, "phase": "p4", "type": "log", "agent": "sales", "system": "Quote engine", "text": "Add-ons applied: Teams calling bundle (4 × $4.99) · hunt group ($9.99 flat). Illustrative demo pricing", "latencyMs": 230, "delayMs": 600 },
+    { "t": 170, "phase": "p4", "type": "chat", "speaker": "agent", "text": "Absolutely. I've added a hunt group so the front desk lines ring together, plus the Teams bundle. 👍", "delayMs": 1600 },
+    { "t": 171, "phase": "p4", "type": "checklist", "itemId": "package", "delayMs": 300 },
+
+    { "t": 175, "phase": "p5", "type": "agent", "stepId": "truck", "status": "running", "delayMs": 1200 },
+    { "t": 176, "phase": "p5", "type": "log", "agent": "scheduling", "system": "Field Service", "text": "Truck-roll check: on-site gateway supports voice (eMTA), inside wiring OK → self-install eligible", "latencyMs": 470, "delayMs": 900 },
+    { "t": 177, "phase": "p5", "type": "agent", "stepId": "truck", "status": "done", "delayMs": 600 },
+    { "t": 178, "phase": "p5", "type": "log", "agent": "scheduling", "system": "Field Service", "text": "Decision: NO truck roll. Saves 1 technician dispatch", "latencyMs": 90, "delayMs": 500 },
+    { "t": 182, "phase": "p5", "type": "chat", "speaker": "agent", "text": "Good news: your existing Spectrum gateway already supports voice, so no technician visit is needed. 🎉\n\nWhen would you like your numbers to go live? Here are 3 open activation slots:", "replies": ["Tue Nov 24 · 9–11 AM", "Wed Nov 25 · 1–3 PM", "Mon Nov 30 · 10 AM–12"], "delayMs": 2000 },
+    { "t": 194, "phase": "p5", "type": "chat", "speaker": "customer", "text": "Wed Nov 25 · 1–3 PM", "selects": "Wed Nov 25 · 1–3 PM", "delayMs": 2800 },
+    { "t": 195, "phase": "p5", "type": "agent", "stepId": "sched", "status": "running", "delayMs": 500 },
+    { "t": 196, "phase": "p5", "type": "log", "agent": "scheduling", "system": "Field Service", "text": "Slot held: Wed Nov 25, 1–3 PM · porting window aligned with carrier FOC date ✔", "latencyMs": 520, "delayMs": 900 },
+    { "t": 197, "phase": "p5", "type": "agent", "stepId": "sched", "status": "done", "delayMs": 600 },
+    { "t": 198, "phase": "p5", "type": "checklist", "itemId": "date", "delayMs": 300 },
+    { "t": 200, "phase": "p5", "type": "chat", "speaker": "agent", "text": "Locked in for Wed, Nov 25, 1–3 PM ✔", "delayMs": 1200 },
+
+    { "t": 205, "phase": "p6", "type": "chat", "speaker": "agent", "text": "Last step: payment. For your security I'll send a secure link. Please don't type card details in this chat.", "widget": { "kind": "secureLink", "id": "pay1", "title": "Secure payment", "subtitle": "PCI-compliant hosted checkout", "url": "pay.spectrum-demo.example/s/8F2K-QX", "amount": "First month ≈ $169.91 · Illustrative demo pricing" }, "delayMs": 1800 },
+    { "t": 222, "phase": "p6", "type": "chat", "speaker": "system", "text": "Maria completed secure checkout", "resolves": "pay1", "delayMs": 3500 },
+    { "t": 223, "phase": "p6", "type": "log", "agent": "order", "system": "Payment gateway", "text": "PCI tokenization complete: token tok_••••4821 stored in iComms. No card data entered in chat ✔", "latencyMs": 720, "delayMs": 700 },
+    { "t": 225, "phase": "p6", "type": "chat", "speaker": "agent", "text": "Payment method on file ✔", "delayMs": 1200 },
+    { "t": 226, "phase": "p6", "type": "checklist", "itemId": "payment", "delayMs": 300 },
+
+    { "t": 230, "phase": "p7", "type": "agent", "stepId": "quality", "status": "running", "delayMs": 900 },
+    { "t": 231, "phase": "p7", "type": "log", "agent": "quality", "system": "Rules engine", "text": "Essentials validation: 5/6 complete. ⚠ Missing: hunt group ring order (which line rings first)", "latencyMs": 340, "delayMs": 1000, "level": "warn" },
+    { "t": 232, "phase": "p7", "type": "callout", "text": "Quality Agent caught a missing essential before order submission.", "tone": "warn", "delayMs": 500 },
+    { "t": 236, "phase": "p7", "type": "chat", "speaker": "agent", "text": "One quick thing before I submit your order: for the front-desk hunt group, which line should ring first?", "replies": ["Front desk (555-0101)", "Billing (555-0102)", "All at once"], "delayMs": 1800 },
+    { "t": 246, "phase": "p7", "type": "chat", "speaker": "customer", "text": "Front desk (555-0101)", "selects": "Front desk (555-0101)", "delayMs": 2500 },
+    { "t": 247, "phase": "p7", "type": "log", "agent": "quality", "system": "Rules engine", "text": "Hunt group ring order captured: 0101 → 0102 → 0103 → 0188. Re-validation: 6/6 essentials ✔", "latencyMs": 260, "delayMs": 900 },
+    { "t": 248, "phase": "p7", "type": "agent", "stepId": "quality", "status": "done", "delayMs": 500 },
+    { "t": 249, "phase": "p7", "type": "callout", "text": "Avoided: bad first experience + a call into customer care.", "tone": "success", "delayMs": 500 },
+    { "t": 258, "phase": "p7", "type": "chat", "speaker": "agent", "text": "Thanks! Here's everything in one place:", "widget": { "kind": "summary", "title": "Order summary", "rows": [
+      ["Business", "Peachtree Family Dental"],
+      ["Address", "1450 Peachtree St NE, Atlanta GA"],
+      ["Lines", "4 (3 ported + 1 new)"],
+      ["Ported", "(404) 555-0101 / 0102 / 0103"],
+      ["New number", "(404) 555-0188"],
+      ["Package", "Plus + Teams bundle"],
+      ["Hunt group", "Front desk rings first"],
+      ["Install", "Self-install · Wed Nov 25, 1–3 PM"],
+      ["Payment", "Method on file ✔"],
+      ["Est. monthly", "$169.91 · demo pricing"]
+    ] }, "replies": ["Confirm order"], "delayMs": 2200 },
+    { "t": 270, "phase": "p7", "type": "chat", "speaker": "customer", "text": "Confirm order", "selects": "Confirm order", "delayMs": 3500 },
+
+    { "t": 272, "phase": "p8", "type": "agent", "stepId": "order", "status": "running", "delayMs": 600 },
+    { "t": 273, "phase": "p8", "type": "log", "agent": "order", "system": "Salesforce", "text": "Account updated, quote Q-0048213 accepted, order SB-2026-48213 created", "latencyMs": 610, "delayMs": 900 },
+    { "t": 274, "phase": "p8", "type": "log", "agent": "order", "system": "iComms", "text": "Billing account + 4 service lines created, recurring charges attached", "latencyMs": 480, "delayMs": 800 },
+    { "t": 275, "phase": "p8", "type": "agent", "stepId": "order", "status": "done", "delayMs": 500 },
+    { "t": 276, "phase": "p8", "type": "chat", "speaker": "agent", "text": "Confirmed! 🎊 Your order number is SB-2026-48213. I'll message you here on activation day.", "delayMs": 1200 },
+    { "t": 277, "phase": "p8", "type": "agent", "stepId": "prio", "status": "running", "delayMs": 500 },
+    { "t": 278, "phase": "p8", "type": "log", "agent": "orchestrator", "system": "Workflow engine", "text": "Priority: SMB · 4 lines · self-install → fast lane. Routed to automated provisioning", "latencyMs": 150, "delayMs": 900 },
+    { "t": 279, "phase": "p8", "type": "agent", "stepId": "prio", "status": "done", "delayMs": 500 },
+    { "t": 280, "phase": "p8", "type": "agent", "stepId": "prov", "status": "running", "delayMs": 400 },
+    { "t": 281, "phase": "p8", "type": "log", "agent": "provisioning", "system": "Cisco BroadWorks", "text": "Group created · 4 users · 3 numbers staged for port, 1 new number assigned", "latencyMs": 1140, "delayMs": 900 },
+    { "t": 282, "phase": "p8", "type": "log", "agent": "provisioning", "system": "Cisco BroadWorks", "text": "Voicemail, auto-attendant (IVR), hunt group (ring order 0101→0102→0103→0188), Teams integration configured", "latencyMs": 1310, "delayMs": 1000 },
+    { "t": 283, "phase": "p8", "type": "agent", "stepId": "prov", "status": "done", "delayMs": 500 },
+    { "t": 284, "phase": "p8", "type": "agent", "stepId": "gw", "status": "running", "delayMs": 400 },
+    { "t": 285, "phase": "p8", "type": "log", "agent": "netconfig", "system": "Device mgmt / ACS", "text": "Gateway eMTA profile pushed: 4 voice ports registered to SBC ✔", "latencyMs": 880, "delayMs": 900 },
+    { "t": 286, "phase": "p8", "type": "agent", "stepId": "gw", "status": "done", "delayMs": 500 },
+
+    { "t": 286, "phase": "p9", "type": "chat", "speaker": "system", "text": "Wed, Nov 25 · 1:00 PM · Activation day", "delayMs": 2200 },
+    { "t": 286, "phase": "p9", "type": "chat", "speaker": "agent", "text": "Hi Maria! Your numbers are ready to switch over to Spectrum Business Voice. Tap to activate. It takes about a minute.", "replies": ["Accept & activate"], "delayMs": 1800 },
+    { "t": 286, "phase": "p9", "type": "chat", "speaker": "customer", "text": "Accept & activate", "selects": "Accept & activate", "delayMs": 2500 },
+    { "t": 286, "phase": "p9", "type": "agent", "stepId": "act", "status": "running", "delayMs": 500 },
+    { "t": 286, "phase": "p9", "type": "log", "agent": "activation", "system": "LNP/NPAC", "text": "Port-in activation: 3/3 numbers concluded at carrier ✔", "latencyMs": 1620, "delayMs": 1000 },
+    { "t": 286, "phase": "p9", "type": "log", "agent": "activation", "system": "Cisco BroadWorks", "text": "Test call (404) 555-0101 → inbound/outbound ✔ · hunt group rings in order ✔", "latencyMs": 1980, "delayMs": 1000 },
+    { "t": 286, "phase": "p9", "type": "agent", "stepId": "act", "status": "done", "delayMs": 600 },
+    { "t": 286, "phase": "p9", "type": "chat", "speaker": "agent", "text": "Test call succeeded ✔ You're live! 🎉 Thank you for choosing Spectrum Business, Maria.", "delayMs": 1600 },
+    { "t": 286, "phase": "p10", "type": "kpi", "delayMs": 3000 }
+  ]
+}

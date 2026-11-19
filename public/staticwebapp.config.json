@@ -1,0 +1,9 @@
+{
+  "navigationFallback": { "rewrite": "/index.html", "exclude": ["/assets/*"] },
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "SAMEORIGIN",
+    "Referrer-Policy": "no-referrer"
+  },
+  "mimeTypes": { ".json": "application/json" }
+}
