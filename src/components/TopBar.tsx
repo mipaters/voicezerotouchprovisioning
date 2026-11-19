@@ -1,4 +1,4 @@
-import { Pause, Play, Presentation, RotateCcw, SkipForward, Sparkles, History } from "lucide-react";
+import { Briefcase, Pause, Play, Presentation, RotateCcw, SkipForward, Sparkles, History } from "lucide-react";
 import { useEffect, useState } from "react";
 import { scenario, type PlayerState } from "../engine/useScenarioPlayer";
 
@@ -31,12 +31,14 @@ export function TopBar({
   notes,
   onLegacy,
   onNotes,
+  onExec,
 }: {
   p: PlayerState;
   legacy: boolean;
   notes: boolean;
   onLegacy: () => void;
   onNotes: () => void;
+  onExec: () => void;
 }) {
   const cust = useSmooth(p.customerSeconds);
   const days = useSmooth(p.progress * scenario.meta.legacyDays * 10) / 10;
@@ -86,6 +88,9 @@ export function TopBar({
         </button>
         <button className={`${btn} ${notes ? "bg-amber-400/30 text-amber-100" : ""}`} onClick={onNotes} title="N">
           <Presentation size={14} /> Notes
+        </button>
+        <button className={`${btn} bg-white/10`} onClick={onExec} title="E">
+          <Briefcase size={14} /> Exec walkthrough
         </button>
         {p.liveAiAvailable && (
           <button className={`${btn} ${p.liveAi ? "bg-purple-500/40" : ""}`} onClick={() => p.setLiveAi(!p.liveAi)}>

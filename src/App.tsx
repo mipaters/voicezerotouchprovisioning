@@ -8,12 +8,14 @@ import { EventLog } from "./components/EventLog";
 import { LegacyView } from "./components/LegacyView";
 import { SummaryKPIs } from "./components/SummaryKPIs";
 import { PresenterNotes } from "./components/PresenterNotes";
+import { ExecWalkthrough } from "./components/ExecWalkthrough";
 
 export default function App() {
   const p = useScenarioPlayer();
   const [legacy, setLegacy] = useState(false);
   const [notes, setNotes] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(true);
+  const [exec, setExec] = useState(false);
 
   useEffect(() => {
     if (p.kpiShown) setSummaryOpen(true);
@@ -24,7 +26,9 @@ export default function App() {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const k = e.key.toLowerCase();
-      if (k === " ") {
+      if (exec) return;
+      if (k === "e") setExec(true);
+      else if (k === " ") {
         e.preventDefault();
         toggle();
       } else if (k === "arrowright") step();
@@ -34,11 +38,11 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [toggle, step, reset]);
+  }, [toggle, step, reset, exec]);
 
   return (
-    <div className="flex h-full flex-col bg-navy-900">
-      <TopBar p={p} legacy={legacy} notes={notes} onLegacy={() => setLegacy((v) => !v)} onNotes={() => setNotes((v) => !v)} />
+    <div className="relative flex h-full flex-col bg-navy-900">
+      <TopBar p={p} legacy={legacy} notes={notes} onLegacy={() => setLegacy((v) => !v)}       onNotes={() => setNotes((v) => !v)} onExec={() => setExec(true)} />
       <div className="h-1 bg-white/5">
         <div className="h-full bg-spectrum transition-all duration-500" style={{ width: `${(p.index / p.total) * 100}%` }} />
       </div>
@@ -68,8 +72,9 @@ export default function App() {
         </div>
       </div>
 
+      {exec && <ExecWalkthrough onClose={() => setExec(false)} />}
       <div className="shrink-0 border-t border-white/10 bg-navy-900 px-4 py-1 text-center text-[10px] text-white/50">
-        Demo — simulated data. Not a production system. · Illustrative demo pricing · Space play/pause · → step · R reset · L legacy · N notes
+        Demo — simulated data. Not a production system. · Illustrative demo pricing · Space play/pause · → step · R reset · L legacy · N notes · E executive walkthrough
       </div>
     </div>
   );
